@@ -1,8 +1,8 @@
 # name: discourse-facebook-onebox
 # about: Discourse Onebox to display Facebook elements
 # version: 0.2
-# authors: Vinoth Kannan (vinothkannans)
-# url: https://github.com/vinkas0/discourse-facebook-onebox
+# authors: Huan Nghiem
+# url: https://github.com/nightshadecf/discourse-facebook-onebox
 
 # javascript
 register_asset "javascripts/embedFB.js"
