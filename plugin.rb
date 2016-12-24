@@ -29,7 +29,7 @@ module Onebox
       end
 
       private
-      def self.fetch_response(location, limit = 5, domain = nil, headers = nil)
+      def fetch_response(location, limit = 5, domain = nil, headers = nil)
         raise Net::HTTPError.new('HTTP redirect too deep', location) if limit == 0
 
         uri = URI(location)
