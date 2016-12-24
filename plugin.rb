@@ -46,9 +46,9 @@ module Onebox
 
       def get_oembed_data
         if video?
-          Onebox::Helpers.symbolize_keys(::MultiJson.load(Onebox::Helpers.fetch_response("https://facebook.com/plugins/video/oembed.json?url=#{url}&maxwidth=661&omitscript=true", 5, nil, {"Accept-Language" => "vi"}).body))
+          Onebox::Helpers.symbolize_keys(::MultiJson.load(Onebox::Helpers.fetch_response("https://facebook.com/plugins/video/oembed.json?url=#{url}&maxwidth=661&omitscript=true").body))
         else
-          Onebox::Helpers.symbolize_keys(::MultiJson.load(Onebox::Helpers.fetch_response("https://facebook.com/plugins/post/oembed.json?url=#{url}&maxwidth=661&omitscript=true", 5, nil, {"Accept-Language" => "vi"}).body))
+          Onebox::Helpers.symbolize_keys(::MultiJson.load(Onebox::Helpers.fetch_response("https://facebook.com/plugins/post/oembed.json?url=#{url}&maxwidth=661&omitscript=true").body))
         end
       end
     end
