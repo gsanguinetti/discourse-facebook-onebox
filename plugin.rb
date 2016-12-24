@@ -29,39 +29,38 @@ module Onebox
       end
 
       private
-			def fetch_response(location, limit = 5, domain = nil, headers = nil)
-				raise Net::HTTPError.new('HTTP redirect too deep', location) if limit == 0
+      def self.fetch_response(location, limit = 5, domain = nil, headers = nil)
+        raise Net::HTTPError.new('HTTP redirect too deep', location) if limit == 0
 
-				uri = URI(location)
-				if !uri.host
-					uri = URI("#{domain}#{location}")
-				end
-				http = Net::HTTP.new(uri.host, uri.port)
-				http.open_timeout = Onebox.options.connect_timeout
-				http.read_timeout = Onebox.options.timeout
-				if uri.is_a?(URI::HTTPS)
-					http.use_ssl = true
-					http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-				end
+        uri = URI(location)
+        if !uri.host
+          uri = URI("#{domain}#{location}")
+        end
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.open_timeout = Onebox.options.connect_timeout
+        http.read_timeout = Onebox.options.timeout
+        if uri.is_a?(URI::HTTPS)
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+        headers['accept-language'] = 'vi' if headers.is_a? Hash
+        headers = {'accept-language' => 'vi'} if headers == nil
 
-				headers['accept-language'] = 'vi' if headers.is_a? Hash
-  			headers = {'accept-language' => 'vi'} if headers == nil
+        response = http.request_get(uri.request_uri,headers)
 
-				response = http.request_get(uri.request_uri,headers)
+        cookie = response.get_fields('set-cookie')
+        if (cookie)
+          header = {'cookie' => cookie.join("")}
+        end
+        header = nil unless header.is_a? Hash
 
-				cookie = response.get_fields('set-cookie')
-				if (cookie)
-					header = {'cookie' => cookie.join("")}
-				end
-				header = nil unless header.is_a? Hash
-
-				case response
-					when Net::HTTPSuccess     then response
-					when Net::HTTPRedirection then fetch_response(response['location'], limit - 1, "#{uri.scheme}://#{uri.host}",header)
-					else
-						response.error!
-				end
-			end
+        case response
+          when Net::HTTPSuccess     then response
+          when Net::HTTPRedirection then fetch_response(response['location'], limit - 1, "#{uri.scheme}://#{uri.host}",header)
+          else
+            response.error!
+        end
+      end			
       def video?
         url =~ /\/video.php\?|\/videos\//
       end
