@@ -43,8 +43,8 @@ module Onebox
           http.use_ssl = true
           http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
-        headers['accept-language'] = 'vi' if headers.is_a? Hash
-        headers = {'accept-language' => 'vi'} if headers == nil
+        headers['accept-language'] = 'es' if headers.is_a? Hash
+        headers = {'accept-language' => 'es'} if headers == nil
 
         response = http.request_get(uri.request_uri,headers)
 
